@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>true</IsPackable>
+    <RepositoryUrl>https://github.com/p-cuadros/bank-2024.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
