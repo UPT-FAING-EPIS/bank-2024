@@ -17,7 +17,11 @@ jobs:
     #    git branch --remote --contains | grep origin/main
     - name: Set VERSION variable from tag
       id: set-version
-      run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+      run: |
+        echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+        echo "PACK_NAME=Bank.WebApi.${VERSION}.nupkg" >> $GITHUB_ENV
+        echo "::set-output name=pack_file::$PACK_NAME"
+
     - name: Build
       run: dotnet build -c Release
     - name: Pack
@@ -36,9 +40,8 @@ jobs:
         prerelease: false
     - name: filename
       run: |
-        echo "Bank.WebApi.${{ steps.set-version.outputs.VERSION }}.nupkg"
-        echo "${VERSION}"
-        echo "Bank.WebApi.${VERSION}.nupkg"
+        echo ${{ steps.set-version.outputs.pack_file }}
+        echo "${PACK_NAME}"
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
@@ -46,8 +49,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./Bank.WebApi."${{ steps.set-version.outputs.VERSION }}".nupkg
-        asset_name: Bank.WebApi.${VERSION}.nupkg
+        asset_path: ./${{ steps.set-version.outputs.pack_file }}
+        asset_name: ${{ steps.set-version.outputs.pack_file }}
         asset_content_type: application/nupkg
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
