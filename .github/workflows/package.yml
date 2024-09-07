@@ -23,5 +23,25 @@ jobs:
       run: dotnet pack -c Release /p:Version=${VERSION} --no-build --output .
     - name: Push
       run: dotnet nuget push Bank.WebApi.${VERSION}.nupkg --source https://nuget.pkg.github.com/p-cuadros/index.json --api-key "${{ secrets.PACKAGE_AUTH_TOKEN }}"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./Bank.WebApi.${VERSION}.nupkg
+        asset_name: Bank.WebApi.${VERSION}.nupkg
+        asset_content_type: application/nupkg
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
