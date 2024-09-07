@@ -19,7 +19,7 @@ jobs:
       id: set-version
       run: |
         echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-        echo "PACK_NAME=Bank.WebApi.${VERSION}.nupkg" >> $GITHUB_ENV
+        echo "PACK_NAME=Bank.WebApi.${GITHUB_REF/refs\/tags\/v/}.nupkg" >> $GITHUB_ENV
         echo "::set-output name=pack_file::$PACK_NAME"
 
     - name: Build
