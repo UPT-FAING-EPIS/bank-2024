@@ -1,0 +1,10 @@
+name: prueba runner
+on:
+    workflow_call:
+jobs:
+    ejemplo01:
+        name: Ejecucion 01
+        runs-on: default
+        steps:
+            - name: paso 01
+              run: echo "Hola"
