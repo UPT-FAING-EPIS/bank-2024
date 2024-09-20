@@ -4,7 +4,7 @@ on:
 jobs:
     ejemplo01:
         name: Ejecucion 01
-        runs-on: default
+        runs-on: prod01
         steps:
             - name: paso 01
               run: echo "Hola"
