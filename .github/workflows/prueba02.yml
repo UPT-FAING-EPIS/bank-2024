@@ -4,7 +4,7 @@ on:
 jobs:
     ejemplo01:
         name: Ejecucion 01
-        runs-on: prod01
+        runs-on: self-hosted
         steps:
             - name: paso 01
               run: echo "Hola"
